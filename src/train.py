@@ -1,8 +1,11 @@
 import pathlib
 import pandas as pd
-
+import matplotlib.pyplot as plt
 from logisctic_regression import LogisticRegressionModel
 import utils
+
+OUTPUT_DIR = pathlib.Path("/Users/r.ilay/Desktop/AI Portfolio/Breast Cancer Classifier/notebooks")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def _load_wdbc():
@@ -56,6 +59,51 @@ def main():
     print(f"  Precision: {prec:.4f}")
     print(f"  Recall   : {rec:.4f}")
     print(f"  F1-score : {f1:.4f}")
+
+    # plots
+    plot_confusion_matrix(y_test, y_pred, name="confusion_matrix.png")
+    proba = model.predict_proba(X_test)
+    plot_roc_curve(y_test, proba, name="roc_curve.png")
+
+
+def plot_confusion_matrix(y_true, y_pred, name="confusion_matrix.png"):
+    cm = utils.confusion_matrix(y_true, y_pred)
+    fig, ax = plt.subplots()
+    ax.imshow(cm, cmap="Blues")
+    ax.set_title("Confusion Matrix")
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("True")
+
+    for i in range(2):
+        for j in range(2):
+            ax.text(j, i, cm[i, j], ha="center", va="center", color="black")
+
+    plt.tight_layout()
+    outpath = OUTPUT_DIR / name
+    fig.savefig(outpath)
+    plt.close(fig)
+    print(f"Saved confusion matrix plot -> {outpath}")
+
+
+def plot_roc_curve(y_true, y_score, name="roc_curve.png"):
+    fpr, tpr, _ = utils.roc_curve(y_true, y_score)
+    auc_val = utils.auc(fpr, tpr)
+
+    fig, ax = plt.subplots()
+    ax.plot(fpr, tpr, label=f"AUC = {auc_val:.4f}")
+    ax.plot([0, 1], [0, 1], linestyle="--", color="gray")
+    ax.set_xlabel("False Positive Rate")
+    ax.set_ylabel("True Positive Rate")
+    ax.set_title("ROC Curve")
+    ax.legend()
+
+    plt.tight_layout()
+    outpath = OUTPUT_DIR / name
+    fig.savefig(outpath)
+    plt.close(fig)
+    print(f"Saved ROC curve plot -> {outpath}")
 
 
 if __name__ == "__main__":
