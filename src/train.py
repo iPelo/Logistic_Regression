@@ -5,36 +5,52 @@ from logisctic_regression import LogisticRegressionModel
 import utils
 
 
-def main():
-    # locate CSV (first try ./Data/wdbc.csv, then ./wdbc.csv)
-    root = pathlib.Path(__file__).resolve().parent
-    csv_path = root / "Data" / "wdbc.csv"
-    if not csv_path.exists():
-        csv_path = root / "wdbc.csv"
-    data = pd.read_csv(csv_path)
+def _load_wdbc():
+    root = pathlib.Path(__file__).resolve().parent  # e.g., .../src
+    candidates = [
+        root / "Data" / "wdbc.csv",
+        root / "wdbc.csv",
+        root.parent / "Data" / "wdbc.csv",
+        root.parent / "wdbc.csv",
+        root / "Data" / "wdbc.json",
+        root / "wdbc.json",
+        root.parent / "Data" / "wdbc.json",
+        root.parent / "wdbc.json",
+    ]
+    path = next((p for p in candidates if p.exists()), None)
+    if path is None:
+        raise FileNotFoundError("wdbc dataset not found at any of:\n" + "\n".join(map(str, candidates)))
+    if path.suffix.lower() == ".csv":
+        df = pd.read_csv(path)
+    else:
+        df = pd.read_json(path)
+    return df, path
 
-    # Features (drop ID + diagnosis)
+
+def main():
+    data, path = _load_wdbc()
+    # features/labels
     X = data.drop(columns=["id", "diagnosis"]).values
-    # Encode labels (M=1, B=0)
     y = utils.encode_binary(data["diagnosis"].values, pos_label="M")
 
-    # Standardize & split
+    # preprocess
     X_std, mean_, std_ = utils.standardize(X)
     X_train, X_test, y_train, y_test = utils.train_test_split(
         X_std, y, test_size=0.2, shuffle=True, random_state=42
     )
 
-    # Train
+    # train
     model = LogisticRegressionModel(learning_rate=0.01, n_iters=5000)
     model.fit(X_train, y_train)
 
-    # Evaluate
+    # evaluate
     y_pred = model.predict(X_test)
     acc = utils.accuracy_score(y_test, y_pred)
     prec = utils.precision_score(y_test, y_pred)
     rec = utils.recall_score(y_test, y_pred)
     f1 = utils.f1_score(y_test, y_pred)
 
+    print(f"Loaded dataset from: {path}")
     print("Evaluation:")
     print(f"  Accuracy : {acc:.4f}")
     print(f"  Precision: {prec:.4f}")
