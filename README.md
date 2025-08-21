@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/iPelo/Breast-Cancer-Classifier">
+  <a href="https://github.com/iPelo/Logistic_Regression">
     BREAST-CANCER-CLASSIFIER (Logistic Regression from Scratch)
   </a>
 </h1>
@@ -7,9 +7,9 @@
 <p align="center">Early Detection with Logistic Regression – Built from Scratch</p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/last-commit/iPelo/Breast-Cancer-Classifier?style=for-the-badge" alt="Last Commit">
-  <img src="https://img.shields.io/github/languages/top/iPelo/Breast-Cancer-Classifier?style=for-the-badge" alt="Top Language">
-  <img src="https://img.shields.io/github/languages/count/iPelo/Breast-Cancer-Classifier?style=for-the-badge" alt="Language Count">
+  <img src="https://img.shields.io/github/last-commit/iPelo/Logistic_Regression?style=for-the-badge" alt="Last Commit">
+  <img src="https://img.shields.io/github/languages/top/iPelo/Logistic_Regression?style=for-the-badge" alt="Top Language">
+  <img src="https://img.shields.io/github/languages/count/iPelo/Logistic_Regression?style=for-the-badge" alt="Language Count">
 </p>
 
 <p align="center">
@@ -55,7 +55,7 @@ We use the **WDBC dataset** from the UCI Machine Learning Repository:
 - **Features:** 30 numeric attributes (cell nucleus characteristics).  
 - **Target:** `diagnosis` (M = malignant, B = benign).  
 
-> 📌 The dataset is included in the repo (`wdbc.csv` / `wdbc.json`).
+> 📌 The dataset is included in the repo under the `data/` directory (`wdbc.csv` / `wdbc.json`).
 
 ---
 
