@@ -2,11 +2,11 @@ import pathlib
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from logisctic_regression import LogisticRegressionModel
+from logistic_regression import LogisticRegressionModel
 import utils
 
 # Directory where plots will be saved
-OUTPUT_DIR = (pathlib.Path(__file__).resolve().parent[1] / "notebooks")
+OUTPUT_DIR = pathlib.Path(__file__).resolve().parent[1] / "notebooks"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
@@ -84,6 +84,21 @@ def plot_roc_curve(y_true, y_score, name="roc_curve.png"):
     plt.close(fig)
     print(f"Saved ROC curve plot -> {outpath}")
 
+def plot_loss_curve(loss_values, name="loss_curve.png"):
+    """
+    Create and save the training loss curve.
+    """
+    fig, ax = plt.subplots()
+    ax.plot(range(1, len(loss_values) + 1), loss_values)
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Binary Cross-Entropy Loss")
+    ax.set_title("Training Loss")
+    plt.tight_layout()
+    outpath = OUTPUT_DIR / name
+    fig.savefig(outpath)
+    plt.close(fig)
+    print(f"Saved loss curve plot -> {outpath}")
+
 
 def main():
     # 1. Load dataset
@@ -123,6 +138,8 @@ def main():
     proba = model.predict_proba(X_test)
     plot_roc_curve(y_test, proba, name="roc_curve.png")
 
+    if hasattr(model, "loss_") and len(model.loss_) > 0:
+        plot_loss_curve(model.loss_, name="loss_curve.png")
 
 if __name__ == "__main__":
     main()

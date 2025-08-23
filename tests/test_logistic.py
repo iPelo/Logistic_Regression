@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.logisctic_regression import LogisticRegressionModel
+from src.logistic_regression import LogisticRegressionModel
 from src import utils
 
 
