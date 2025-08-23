@@ -16,10 +16,17 @@ class LogisticRegressionModel:
         self.n_iters = n_iters
         self.weights = None
         self.bias = None
+        self.loss = []
 
     def _sigmoid(self, z):
-        """Sigmoid activation function."""
-        return 1 / (1 + np.exp(-z))
+        """Sigmoid activation function (numerically stable)."""
+        z = np.asarray(z, dtype=float)
+        out = np.empty_like(z)
+        pos = z >= 0
+        out[pos] = 1.0 / (1.0 + np.exp(-z[pos]))
+        expz = np.exp(z[~pos])
+        out[~pos] = expz / (1.0 + expz)
+        return out
 
     def fit(self, X, y):
         """
@@ -41,6 +48,12 @@ class LogisticRegressionModel:
             linear_model = X @ self.weights + self.bias
             # Apply sigmoid to get probabilities
             y_predicted = self._sigmoid(linear_model)
+
+            # binary cross-entropy loss (with epsilon for numerical safety)
+            eps = 1e-12
+            loss = (-y * np.log(y_predicted + eps) - (1 - y) * np.log(1 - y_predicted + eps)).mean()
+            self.loss_.append(loss)
+
 
             # Compute gradients
             dw = (1.0 / n_samples) * (X.T @ (y_predicted - y))
