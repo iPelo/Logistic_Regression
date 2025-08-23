@@ -19,13 +19,13 @@ def _load_wdbc():
     """
     root = pathlib.Path(__file__).resolve().parent
     candidates = [
-        root / "Data" / "wdbc.csv",
+        root / "data" / "wdbc.csv",
         root / "wdbc.csv",
-        root.parent / "Data" / "wdbc.csv",
+        root.parent / "data" / "wdbc.csv",
         root.parent / "wdbc.csv",
-        root / "Data" / "wdbc.json",
+        root / "data" / "wdbc.json",
         root / "wdbc.json",
-        root.parent / "Data" / "wdbc.json",
+        root.parent / "data" / "wdbc.json",
         root.parent / "wdbc.json",
     ]
     path = next((p for p in candidates if p.exists()), None)
