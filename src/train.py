@@ -6,7 +6,7 @@ from logisctic_regression import LogisticRegressionModel
 import utils
 
 # Directory where plots will be saved
-OUTPUT_DIR = pathlib.Path("/Users/r.ilay/Desktop/AI Portfolio/Breast Cancer Classifier/notebooks")
+OUTPUT_DIR = (pathlib.Path(__file__).resolve().parent[1] / "notebooks")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
